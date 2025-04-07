@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Mini Game WASM</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>Pontuação: <span id="score">0</span></h1>
+    <div id="game-area">
+        <div id="square"></div>
+    </div>
+
+    <script type="module">
+        import init, { clicked_square } from "./pkg/wasm_game.js";
+
+        let score = 0;
+        const scoreDisplay = document.getElementById("score");
+        const square = document.getElementById("square");
+
+        init().then(() => {
+            moveSquare();
+
+            square.addEventListener("click", () => {
+                score = clicked_square(score);
+                scoreDisplay.textContent = score;
+                moveSquare();
+            });
+        });
+
+        function moveSquare() {
+            const area = document.getElementById("game-area");
+            const x = Math.random() * (area.clientWidth - 50);
+            const y = Math.random() * (area.clientHeight - 50);
+            square.style.left = `${x}px`;
+            square.style.top = `${y}px`;
+        }
+    </script>
+</body>
+</html>
